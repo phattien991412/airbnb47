@@ -24,8 +24,6 @@ const Home = async ({ searchParams }: HomeProps) => {
     );
   }
 
-  console.log({listings});
-
   return (
     <ClientOnly>
       <Container>

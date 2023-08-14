@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { format } from 'date-fns';
@@ -14,6 +13,7 @@ import {
 
 import HeartButton from "../HeartButton";
 import Button from "../Button";
+import BlurredImage from "../BlurredImage";
 
 interface ListingCardProps {
   data: SafeListing;
@@ -84,7 +84,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             rounded-xl
           "
         >
-          <Image
+          <BlurredImage
             fill
             className="
               object-cover 

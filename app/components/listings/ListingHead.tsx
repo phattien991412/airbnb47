@@ -1,12 +1,11 @@
 'use client';
 
-import Image from "next/image";
-
 import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
 
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
+import BlurredImage from "../BlurredImage";
 
 interface ListingHeadProps {
   title: string;
@@ -41,7 +40,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           relative
         "
       >
-        <Image
+        <BlurredImage
           src={imageSrc}
           fill
           className="object-cover w-full"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,8 @@ const UserMenu: React.FC<UserMenuProps> = ({
 }) => {
   const router = useRouter();
 
+  const refModal = useRef<HTMLDivElement>(null);
+
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const rentModal = useRentModal();
@@ -39,6 +41,18 @@ const UserMenu: React.FC<UserMenuProps> = ({
 
     rentModal.onOpen();
   }, [loginModal, rentModal, currentUser]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (refModal.current && !refModal.current.contains(event.target  as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return ( 
     <div className="relative">
@@ -61,6 +75,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
           Airbnb your home
         </div>
         <div 
+        ref={refModal}
         onClick={toggleOpen}
         className="
           p-4

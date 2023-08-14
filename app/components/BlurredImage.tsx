@@ -4,7 +4,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-type Props = {
+interface Props {
     src: string;
     alt: string;
     width?: number;

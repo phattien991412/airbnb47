@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 
 import Button from "../Button";
@@ -32,14 +32,16 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
 
-  useEffect(() => {
-    setShowModal(isOpen);
-  }, [isOpen]);
+  const refModal = useRef<HTMLDivElement>(null);
 
   const handleClose = useCallback(() => {
     if (disabled) {
       return;
     }
+
+    const body = document.querySelector("body")  as HTMLBodyElement;
+
+    body!.style.overflowY = "auto";
   
     setShowModal(false);
     setTimeout(() => {
@@ -63,6 +65,24 @@ const Modal: React.FC<ModalProps> = ({
     secondaryAction();
   }, [secondaryAction, disabled]);
 
+  useEffect(() => {
+    setShowModal(isOpen);
+    const body = document.querySelector("body")  as HTMLBodyElement;
+
+    if (isOpen) {
+      body!.style.overflowY = "hidden";
+    }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (refModal.current && !refModal.current.contains(event.target  as Node)) {
+        handleClose();
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, handleClose]);
+
   if (!isOpen) {
     return null;
   }
@@ -75,7 +95,7 @@ const Modal: React.FC<ModalProps> = ({
           items-center 
           flex 
           overflow-x-hidden 
-          overflow-y-auto 
+          overflow-y-auto
           fixed 
           inset-0 
           z-50 
@@ -84,7 +104,7 @@ const Modal: React.FC<ModalProps> = ({
           bg-neutral-800/70
         "
       >
-        <div className="
+        <div ref={refModal} className="
           relative 
           w-full
           md:w-4/6
@@ -98,7 +118,7 @@ const Modal: React.FC<ModalProps> = ({
           "
         >
           {/*content*/}
-          <div className={`
+          <div  className={`
             translate
             duration-300
             h-full

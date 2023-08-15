@@ -97,9 +97,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
           <div className="hidden md:block">
             <Avatar src={currentUser?.image} />
           </div>
-        </div>
-      </div>
-      {isOpen && (
+          {isOpen && (
         <div 
           className="
             absolute 
@@ -158,6 +156,9 @@ const UserMenu: React.FC<UserMenuProps> = ({
           </div>
         </div>
       )}
+        </div>
+      </div>
+      
     </div>
    );
 }

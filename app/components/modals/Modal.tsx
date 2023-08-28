@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 
 import Button from "../Button";
@@ -18,35 +18,33 @@ interface ModalProps {
   secondaryActionLabel?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  onSubmit, 
-  title, 
-  body, 
-  actionLabel, 
-  footer, 
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  title,
+  body,
+  actionLabel,
+  footer,
   disabled,
   secondaryAction,
   secondaryActionLabel
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
 
-  const refModal = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setShowModal(isOpen);
+  }, [isOpen]);
 
   const handleClose = useCallback(() => {
     if (disabled) {
       return;
     }
 
-    const body = document.querySelector("body")  as HTMLBodyElement;
-
-    body!.style.overflowY = "auto";
-  
     setShowModal(false);
     setTimeout(() => {
       onClose();
-    }, 300)
+    }, 300);
   }, [onClose, disabled]);
 
   const handleSubmit = useCallback(() => {
@@ -65,24 +63,6 @@ const Modal: React.FC<ModalProps> = ({
     secondaryAction();
   }, [secondaryAction, disabled]);
 
-  useEffect(() => {
-    setShowModal(isOpen);
-    const body = document.querySelector("body")  as HTMLBodyElement;
-
-    if (isOpen) {
-      body!.style.overflowY = "hidden";
-    }
-    const handleClickOutside = (event: MouseEvent) => {
-      if (refModal.current && !refModal.current.contains(event.target  as Node)) {
-        handleClose();
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, handleClose]);
-
   if (!isOpen) {
     return null;
   }
@@ -95,7 +75,7 @@ const Modal: React.FC<ModalProps> = ({
           items-center 
           flex 
           overflow-x-hidden 
-          overflow-y-auto
+          overflow-y-auto 
           fixed 
           inset-0 
           z-50 
@@ -104,7 +84,8 @@ const Modal: React.FC<ModalProps> = ({
           bg-neutral-800/70
         "
       >
-        <div ref={refModal} className="
+        <div
+          className="
           relative 
           w-full
           md:w-4/6
@@ -118,14 +99,17 @@ const Modal: React.FC<ModalProps> = ({
           "
         >
           {/*content*/}
-          <div  className={`
+          <div
+            className={`
             translate
             duration-300
             h-full
-            ${showModal ? 'translate-y-0' : 'translate-y-full'}
-            ${showModal ? 'opacity-100' : 'opacity-0'}
-          `}>
-            <div className="
+            ${showModal ? "translate-y-0" : "translate-y-full"}
+            ${showModal ? "opacity-100" : "opacity-0"}
+          `}
+          >
+            <div
+              className="
               translate
               h-full
               lg:h-auto
@@ -143,7 +127,8 @@ const Modal: React.FC<ModalProps> = ({
             "
             >
               {/*header*/}
-              <div className="
+              <div
+                className="
                 flex 
                 items-center 
                 p-6
@@ -166,17 +151,13 @@ const Modal: React.FC<ModalProps> = ({
                 >
                   <IoMdClose size={18} />
                 </button>
-                <div className="text-lg font-semibold">
-                  {title}
-                </div>
+                <div className="text-lg font-semibold">{title}</div>
               </div>
               {/*body*/}
-              <div className="relative p-6 flex-auto">
-                {body}
-              </div>
+              <div className="relative p-6 flex-auto">{body}</div>
               {/*footer*/}
               <div className="flex flex-col gap-2 p-6">
-                <div 
+                <div
                   className="
                     flex 
                     flex-row 
@@ -186,16 +167,16 @@ const Modal: React.FC<ModalProps> = ({
                   "
                 >
                   {secondaryAction && secondaryActionLabel && (
-                    <Button 
-                      disabled={disabled} 
-                      label={secondaryActionLabel} 
+                    <Button
+                      disabled={disabled}
+                      label={secondaryActionLabel}
                       onClick={handleSecondaryAction}
                       outline
-                    />  
+                    />
                   )}
-                  <Button 
-                    disabled={disabled} 
-                    label={actionLabel} 
+                  <Button
+                    disabled={disabled}
+                    label={actionLabel}
                     onClick={handleSubmit}
                   />
                 </div>
@@ -207,6 +188,6 @@ const Modal: React.FC<ModalProps> = ({
       </div>
     </>
   );
-}
+};
 
 export default Modal;
